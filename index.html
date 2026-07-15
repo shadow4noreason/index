@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Виктор Ш. · Начинающий Python-разработчик</title>
+  <!-- Шрифты и иконки -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ----- CSS Variables (темы) ----- */
+    :root {
+      --bg-primary: #0b0d10;
+      --bg-secondary: #111a23;
+      --bg-card: #141c26;
+      --bg-card-hover: #1a2533;
+      --bg-header: rgba(11, 13, 16, 0.8);
+      --border-color: rgba(255, 255, 255, 0.05);
+      --border-card: #1e2c3a;
+      --border-card-hover: #3f5a78;
+      --text-primary: #eaeef2;
+      --text-secondary: #b8cbe3;
+      --text-muted: #94aac8;
+      --text-dim: #6a7f9c;
+      --accent: #7aa9ff;
+      --accent-light: #b0d0ff;
+      --accent-dark: #5f94f0;
+      --btn-outline-border: #2e3a4a;
+      --shadow: rgba(0,0,0,0.6);
+      --shadow-accent: rgba(122, 169, 255, 0.2);
+      --badge-bg: rgba(122, 169, 255, 0.12);
+      --badge-border: rgba(122, 169, 255, 0.15);
+      --transition: 0.3s ease;
+      --hobby-detail-bg: rgba(0,0,0,0.2);
+    }
+
+    /* Светлая тема */
+    [data-theme="light"] {
+      --bg-primary: #f2f6fc;
+      --bg-secondary: #e4ecf5;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f0f6fe;
+      --bg-header: rgba(242, 246, 252, 0.85);
+      --border-color: rgba(0, 0, 0, 0.06);
+      --border-card: #d0dcec;
+      --border-card-hover: #a0b8d8;
+      --text-primary: #1a2533;
+      --text-secondary: #2a3a4e;
+      --text-muted: #3f5a78;
+      --text-dim: #5a6f8a;
+      --accent: #2b6ed7;
+      --accent-light: #4a8af0;
+      --accent-dark: #1a4faa;
+      --btn-outline-border: #b0c4dd;
+      --shadow: rgba(0,0,0,0.08);
+      --shadow-accent: rgba(43, 110, 215, 0.2);
+      --badge-bg: rgba(43, 110, 215, 0.08);
+      --badge-border: rgba(43, 110, 215, 0.2);
+      --hobby-detail-bg: rgba(0,0,0,0.04);
+    }
+
+    /* Зелёная терминальная тема */
+    [data-theme="green"] {
+      --bg-primary: #0a0f0c;
+      --bg-secondary: #111f18;
+      --bg-card: #14261d;
+      --bg-card-hover: #1a3226;
+      --bg-header: rgba(10, 15, 12, 0.88);
+      --border-color: rgba(50, 200, 100, 0.12);
+      --border-card: #1f3a2a;
+      --border-card-hover: #3a6a4a;
+      --text-primary: #c8f0d8;
+      --text-secondary: #8fc0a8;
+      --text-muted: #5f8a72;
+      --text-dim: #3d6a52;
+      --accent: #33ff77;
+      --accent-light: #66ff99;
+      --accent-dark: #22cc5e;
+      --btn-outline-border: #1f3a2a;
+      --shadow: rgba(0,0,0,0.7);
+      --shadow-accent: rgba(51, 255, 119, 0.25);
+      --badge-bg: rgba(51, 255, 119, 0.10);
+      --badge-border: rgba(51, 255, 119, 0.20);
+      --hobby-detail-bg: rgba(0,20,0,0.3);
+    }
+
+    /* ----- Сброс и база ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ----- Шапка / навигация ----- */
+    header {
+      padding: 20px 0 16px;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      background: var(--bg-header);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 50;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--accent-light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: background 0.3s;
+    }
+
+    .logo span {
+      font-weight: 400;
+      color: var(--text-muted);
+      -webkit-text-fill-color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.25s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Кнопка переключения темы */
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-card);
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+      background: var(--bg-card);
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: rotate(20deg);
+      background: var(--bg-card-hover);
+    }
+
+    /* ----- Hero ----- */
+    .hero {
+      padding: 60px 0 40px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      border-bottom: 1px solid var(--border-color);
+      transition: border-color var(--transition);
+    }
+
+    .hero-content {
+      flex: 1 1 380px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--badge-bg);
+      color: var(--accent);
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin-bottom: 20px;
+      border: 1px solid var(--badge-border);
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 .highlight {
+      background: linear-gradient(145deg, var(--accent-light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: background 0.3s;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin-bottom: 30px;
+      transition: color var(--transition);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border: 1px solid var(--btn-outline-border);
+      padding: 12px 28px;
+      border-radius: 60px;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border: 1px solid var(--accent);
+      color: #0b0d10;
+      box-shadow: 0 8px 20px var(--shadow-accent);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+      border-color: var(--accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px var(--shadow-accent);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      background: var(--badge-bg);
+    }
+
+    .hero-avatar {
+      flex: 0 0 220px;
+      text-align: center;
+    }
+
+    /* ----- Аватарка с возможностью загрузки ----- */
+    .avatar-wrapper {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--border-card);
+      box-shadow: 0 20px 40px var(--shadow);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      cursor: pointer;
+      background: var(--bg-secondary);
+    }
+
+    .avatar-wrapper:hover {
+      border-color: var(--accent);
+      box-shadow: 0 20px 40px var(--shadow), 0 0 30px var(--shadow-accent);
+    }
+
+    .avatar-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.3s;
+    }
+
+    .avatar-wrapper .avatar-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5.5rem;
+      color: var(--accent);
+      background: var(--bg-secondary);
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .avatar-wrapper.has-image .avatar-placeholder {
+      opacity: 0;
+    }
+
+    .avatar-wrapper .avatar-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+      border-radius: 50%;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 500;
+      flex-direction: column;
+      gap: 4px;
+      pointer-events: none;
+    }
+
+    .avatar-wrapper .avatar-overlay i {
+      font-size: 2rem;
+      margin-bottom: 4px;
+    }
+
+    .avatar-wrapper:hover .avatar-overlay {
+      opacity: 1;
+    }
+
+    .avatar-wrapper input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    /* ----- Секции ----- */
+    section {
+      padding: 72px 0 48px;
+      border-bottom: 1px solid var(--border-color);
+      transition: border-color var(--transition);
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .section-title i {
+      color: var(--accent);
+      font-size: 1.8rem;
+      transition: color var(--transition);
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      font-size: 1.05rem;
+      transition: color var(--transition);
+    }
+
+    /* ----- Навыки ----- */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px;
+    }
+
+    .skill-card {
+      background: var(--bg-card);
+      border-radius: 18px;
+      padding: 24px 16px;
+      text-align: center;
+      border: 1px solid var(--border-card);
+      transition: all 0.25s;
+    }
+
+    .skill-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-6px);
+      background: var(--bg-card-hover);
+      box-shadow: 0 12px 24px var(--shadow);
+    }
+
+    .skill-card i {
+      font-size: 2.4rem;
+      color: var(--accent);
+      margin-bottom: 12px;
+      transition: color var(--transition);
+    }
+
+    .skill-card span {
+      display: block;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    /* ----- Проекты ----- */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      max-width: 500px;
+      gap: 28px;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 28px 24px 24px;
+      border: 1px solid var(--border-card);
+      transition: all 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      border-color: var(--border-card-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 32px var(--shadow);
+    }
+
+    .project-icon {
+      font-size: 2.2rem;
+      color: var(--accent);
+      margin-bottom: 16px;
+      transition: color var(--transition);
+    }
+
+    .project-card h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .project-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      flex: 1;
+      transition: color var(--transition);
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .project-tags span {
+      background: var(--bg-secondary);
+      padding: 4px 14px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      color: var(--text-secondary);
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .project-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      transition: gap 0.2s, color 0.2s;
+    }
+
+    .project-link:hover {
+      gap: 14px;
+      color: var(--accent-light);
+    }
+
+    /* ----- Опыт ----- */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .timeline-item {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      background: var(--bg-card);
+      padding: 22px 28px;
+      border-radius: 20px;
+      border: 1px solid var(--border-card);
+      border-left-width: 6px;
+      border-left-color: var(--accent);
+      transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .timeline-item:hover {
+      background: var(--bg-card-hover);
+      box-shadow: 0 8px 20px var(--shadow);
+    }
+
+    .timeline-year {
+      font-weight: 600;
+      color: var(--accent);
+      min-width: 100px;
+      font-size: 1.1rem;
+      transition: color var(--transition);
+    }
+
+    .timeline-content h4 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .timeline-content p {
+      color: var(--text-secondary);
+      transition: color var(--transition);
+    }
+
+    /* ----- Хобби ----- */
+    .hobbies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 24px;
+    }
+
+    .hobby-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 24px 16px;
+      text-align: center;
+      border: 1px solid var(--border-card);
+      transition: all 0.25s;
+      cursor: default;
+    }
+
+    .hobby-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-6px);
+      background: var(--bg-card-hover);
+      box-shadow: 0 12px 24px var(--shadow);
+    }
+
+    .hobby-card i {
+      font-size: 2.6rem;
+      color: var(--accent);
+      margin-bottom: 12px;
+      transition: color var(--transition);
+    }
+
+    .hobby-card span {
+      display: block;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    .hobby-card.clickable {
+      cursor: pointer;
+    }
+
+    .hobby-detail {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, padding 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+      padding: 0 4px;
+      border-radius: 0 0 16px 16px;
+      margin-top: -4px;
+      border-left: 1px solid var(--border-card);
+      border-right: 1px solid var(--border-card);
+      border-bottom: 1px solid var(--border-card);
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      background: var(--bg-card);
+      transition: max-height 0.5s ease, padding 0.3s ease, opacity 0.3s ease, background 0.3s, border-color 0.3s;
+    }
+
+    .hobby-detail.open {
+      max-height: 400px;
+      opacity: 1;
+      padding: 16px 20px 20px;
+      border-color: var(--accent);
+      background: var(--bg-card-hover);
+    }
+
+    .hobby-detail p {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .hobby-detail ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .hobby-detail li {
+      padding: 4px 0 4px 20px;
+      position: relative;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .hobby-detail li::before {
+      content: '▹';
+      position: absolute;
+      left: 2px;
+      color: var(--accent);
+    }
+
+    .hobby-detail li:hover {
+      color: var(--text-primary);
+    }
+
+    /* ----- Контакты ----- */
+    .contact-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px 48px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .contact-item i {
+      font-size: 1.6rem;
+      color: var(--accent);
+      width: 36px;
+      transition: color var(--transition);
+    }
+
+    .contact-item a, .contact-item span {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .contact-item a:hover {
+      color: var(--text-primary);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .social-links a {
+      color: var(--text-dim);
+      font-size: 1.8rem;
+      transition: all 0.2s;
+    }
+
+    .social-links a:hover {
+      color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    /* ----- Футер ----- */
+    footer {
+      padding: 32px 0 28px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border-color);
+      transition: color var(--transition), border-color var(--transition);
+    }
+
+    footer i {
+      color: var(--accent);
+      margin: 0 4px;
+      transition: color var(--transition);
+    }
+
+    /* ----- Адаптив ----- */
+    @media (max-width: 700px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      .nav-links {
+        justify-content: center;
+        gap: 14px 22px;
+      }
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      .hero-avatar {
+        flex-basis: 160px;
+      }
+      .avatar-wrapper {
+        width: 150px;
+        height: 150px;
+      }
+      .avatar-wrapper .avatar-placeholder {
+        font-size: 4rem;
+      }
+      .contact-grid {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .section-title {
+        font-size: 1.7rem;
+      }
+      .projects-grid {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+      }
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      .timeline-item {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .hobbies-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hobby-detail.open {
+        padding: 12px 16px 16px;
+      }
+      .hobby-detail li {
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Анимация появления карточек */
+    .skill-card, .project-card, .timeline-item, .hobby-card {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.5s ease, transform 0.5s ease, background 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .skill-card.visible, .project-card.visible, .timeline-item.visible, .hobby-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="logo">Виктор <span>Ш.</span></div>
+      <ul class="nav-links">
+        <li><a href="#skills">Навыки</a></li>
+        <li><a href="#projects">Проекты</a></li>
+        <li><a href="#experience">Опыт</a></li>
+        <li><a href="#hobbies">Хобби</a></li>
+        <li><a href="#contact">Контакты</a></li>
+        <li>
+          <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+            <i class="fas fa-moon"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="container hero">
+      <div class="hero-content">
+        <div class="hero-badge"><i class="fas fa-code" style="margin-right: 8px;"></i> Начинающий Python-разработчик</div>
+        <h1>Привет, я <span class="highlight">Виктор</span></h1>
+        <p>Изучаю Python и создаю свои первые проекты. Постоянно учусь новому и стремлюсь к развитию.</p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Проекты</a>
+          <a href="#contact" class="btn btn-outline"><i class="fas fa-paper-plane"></i> Связаться</a>
+        </div>
+      </div>
+      <div class="hero-avatar">
+        <!-- Функциональная аватарка с загрузкой -->
+        <div class="avatar-wrapper" id="avatarWrapper">
+          <img id="avatarImage" src="" alt="Аватар" style="display: none;">
+          <div class="avatar-placeholder" id="avatarPlaceholder">
+            <i class="fas fa-user-astronaut"></i>
+          </div>
+          <div class="avatar-overlay">
+            <i class="fas fa-camera"></i>
+            <span>Загрузить</span>
+          </div>
+          <input type="file" id="avatarInput" accept="image/*">
+        </div>
+      </div>
+    </section>
+
+    <!-- Навыки -->
+    <section id="skills" class="container">
+      <div class="section-title">
+        <i class="fas fa-cog"></i> 
+        <span>Мои инструменты</span>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card"><i class="fab fa-python"></i><span>Python</span></div>
+        <div class="skill-card"><i class="fas fa-robot"></i><span>Code Combat</span></div>
+        <div class="skill-card"><i class="fab fa-scratch"></i><span>Scratch</span></div>
+        <div class="skill-card"><i class="fab fa-html5"></i><span>HTML</span></div>
+        <div class="skill-card"><i class="fas fa-code"></i><span>VS Code</span></div>
+      </div>
+    </section>
+
+    <!-- Проекты -->
+    <section id="projects" class="container">
+      <div class="section-title">
+        <i class="fas fa-laptop-code"></i>
+        <span>Проекты</span>
+      </div>
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-icon"><i class="fas fa-folder-open"></i></div>
+          <h3>Разные</h3>
+          <p>Несколько учебных и личных проектов на Python, включая парсеры, телеграм-ботов и небольшие веб-приложения.</p>
+          <div class="project-tags"><span>Python</span><span>Учеба</span><span>Любительские</span></div>
+          <a href="#" class="project-link">Узнать больше <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Опыт -->
+    <section id="experience" class="container">
+      <div class="section-title">
+        <i class="fas fa-briefcase"></i>
+        <span>Опыт работы</span>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">2012 — 2026</div>
+          <div class="timeline-content">
+            <h4>13 лет живу дома</h4>
+            <p>Полный цикл бытовых задач: поддержание порядка, кулинарные эксперименты, освоение новых навыков и самоорганизация.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Хобби -->
+    <section id="hobbies" class="container">
+      <div class="section-title">
+        <i class="fas fa-heart"></i>
+        <span>Чем увлекаюсь</span>
+      </div>
+      <div class="hobbies-grid">
+        <div class="hobby-card">
+          <i class="fas fa-guitar"></i>
+          <span>Гитара</span>
+        </div>
+        <div class="hobby-card">
+          <i class="fas fa-paint-brush"></i>
+          <span>Рисование</span>
+        </div>
+        <div class="hobby-card clickable" id="gamesToggle">
+          <i class="fas fa-gamepad"></i>
+          <span>Видеоигры</span>
+        </div>
+      </div>
+      <div id="gamesDetail" class="hobby-detail">
+        <p>Я прошёл:</p>
+        <ul>
+          <li>Sonic Adventure</li>
+          <li>Sonic Adventure 2</li>
+          <li>The Coffin of Andy and Leyley</li>
+          <li>Sonic X Shadow Generations</li>
+          <li>Katana Zero</li>
+          <li>Minecraft</li>
+          <li>Call of Duty: Ghosts</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contact" class="container">
+      <div class="section-title">
+        <i class="fas fa-envelope"></i>
+        <span>Контакты</span>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:shadowfornoreason@gmail.com">shadowfornoreason@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone-alt"></i>
+            <span>+375 29 954-03-11</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Минск, Беларусь</span>
+          </div>
+        </div>
+        <div class="social-links">
+          <a href="https://telegram.me/shadowfornoreason" aria-label="Telegram" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+          <a href="https://www.tiktok.com/@shadow_for_no_reason?_r=1&_t=ZS-981WEDpoMkP" aria-label="TikTok" target="_blank"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 Виктор Ш. · Сделано с <i class="fas fa-heart"></i> на чистом коде</p>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      // ---------- Переключение темы ----------
+      const themeToggle = document.getElementById('themeToggle');
+      const icon = themeToggle.querySelector('i');
+      const themes = ['dark', 'light', 'green'];
+      const iconMap = {
+        'dark': 'fa-moon',
+        'light': 'fa-sun',
+        'green': 'fa-leaf'
+      };
+
+      let currentTheme = localStorage.getItem('theme') || 'dark';
+      if (!themes.includes(currentTheme)) currentTheme = 'dark';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      updateIcon(currentTheme);
+
+      themeToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        let index = themes.indexOf(current);
+        index = (index + 1) % themes.length;
+        const newTheme = themes[index];
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateIcon(newTheme);
+      });
+
+      function updateIcon(theme) {
+        icon.className = 'fas ' + (iconMap[theme] || 'fa-moon');
+      }
+
+      // ---------- Загрузка аватарки ----------
+      const avatarWrapper = document.getElementById('avatarWrapper');
+      const avatarInput = document.getElementById('avatarInput');
+      const avatarImage = document.getElementById('avatarImage');
+      const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+      // Проверяем, есть ли сохранённая аватарка в localStorage
+      const savedAvatar = localStorage.getItem('userAvatar');
+      if (savedAvatar) {
+        avatarImage.src = savedAvatar;
+        avatarImage.style.display = 'block';
+        avatarWrapper.classList.add('has-image');
+      }
+
+      avatarInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const dataUrl = event.target.result;
+          avatarImage.src = dataUrl;
+          avatarImage.style.display = 'block';
+          avatarWrapper.classList.add('has-image');
+          // Сохраняем в localStorage
+          localStorage.setItem('userAvatar', dataUrl);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Если кликнуть на аватарку без выбора файла — открыть диалог
+      avatarWrapper.addEventListener('click', function(e) {
+        // Если клик был не по кнопке загрузки (input), всё равно открываем
+        // input сам обработает клик, но если кликнуть мимо — сработает
+      });
+
+      // ---------- Переключение списка игр ----------
+      const gamesToggle = document.getElementById('gamesToggle');
+      const gamesDetail = document.getElementById('gamesDetail');
+
+      gamesToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        gamesDetail.classList.toggle('open');
+        this.style.borderColor = gamesDetail.classList.contains('open') ? 'var(--accent)' : '';
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!gamesToggle.contains(e.target) && !gamesDetail.contains(e.target)) {
+          gamesDetail.classList.remove('open');
+          gamesToggle.style.borderColor = '';
+        }
+      });
+
+      // ---------- Анимация появления карточек ----------
+      const cards = document.querySelectorAll('.skill-card, .project-card, .timeline-item, .hobby-card');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      cards.forEach(card => observer.observe(card));
+
+      // ---------- Микро-интерактив для аватарки (пульсация тени) ----------
+      const avatarWrapperEl = document.querySelector('.avatar-wrapper');
+      if (avatarWrapperEl) {
+        setInterval(() => {
+          avatarWrapperEl.style.boxShadow = '0 20px 40px var(--shadow), 0 0 30px var(--shadow-accent)';
+          setTimeout(() => {
+            avatarWrapperEl.style.boxShadow = '0 20px 40px var(--shadow)';
+          }, 400);
+        }, 3000);
+      }
+    })();
+  </script>
+</body>
+</html>
